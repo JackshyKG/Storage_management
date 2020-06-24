@@ -50,9 +50,9 @@ public class DocRecyclerAdapter extends RecyclerView.Adapter<DocRecyclerAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull DocViewHolder holder, int position) {
-        tvDocNumber.setText(String.valueOf(docList.get(position).getNumber()));
-        tvDocItems.setText(docList.get(position).getTableListAsString());
-        tvDocDate.setText(docList.get(position).getDateAsStringType());
+        holder.tvDocNumber.setText(String.valueOf(docList.get(position).getNumber()));
+        holder.tvDocItems.setText(docList.get(position).getTableListAsString());
+        holder.tvDocDate.setText(docList.get(position).getDateAsStringType());
     }
 
     @Override
