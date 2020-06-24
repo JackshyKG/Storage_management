@@ -1,0 +1,29 @@
+<resources>
+
+    <string name="app_name">Management</string>
+
+    <string name="button_documents">Документы</string>
+    <string name="button_items">Товары</string>
+    <string name="button_report">Отчет</string>
+
+    <string name="sample_doc_number">00000000001</string>
+    <string name="sample_doc_date">03.06.2020</string>
+    <string name="sample_item_count">156</string>
+    <string name="sample_item">Some item</string>
+    <string name="sample_date_time">03.06.2020 16:22</string>
+    <string name="sample_date">03.06.2020</string>
+    <string name="sample_doc_items">item - 1, item - 2, item - 3, item - 4, item - 5...</string>
+
+    <string name="add_button">добавить</string>
+    <string name="edit_button">изменить</string>
+    <string name="save_button">сохранить</string>
+    <string name="show_button">show</string>
+
+    <string name="date_title">Дата:</string>
+    <string name="number_title">Номер:</string>
+    <string name="toast_doc_saved">Документ сохранен</string>
+
+    <string name="intent_document_in">documentIn</string>
+    <string name="intent_document">document</string>
+
+</resources>
