@@ -16,17 +16,16 @@ public class DocRecyclerAdapter extends RecyclerView.Adapter<DocRecyclerAdapter.
     private Context context;
     private ArrayList<Document> docList;
 
-    private TextView tvDocNumber;
-    private TextView tvDocItems;
-    private TextView tvDocDate;
-
-
     public DocRecyclerAdapter(Context context, ArrayList<Document> docList) {
         this.context = context;
         this.docList = docList;
     }
 
     public class DocViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView tvDocNumber;
+        public TextView tvDocItems;
+        public TextView tvDocDate;
 
         public DocViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -63,6 +62,14 @@ public class DocRecyclerAdapter extends RecyclerView.Adapter<DocRecyclerAdapter.
     public void updateDocListAndNotify(ArrayList<Document> docList) {
         this.docList = docList;
         notifyDataSetChanged();
+    }
+
+    public void updateDocumentAndNotify(Document document, int position) {
+        notifyItemChanged(position);
+    }
+
+    public void addDocumentAndNotify() {
+        notifyItemInserted(docList.size() - 1);
     }
 
 }

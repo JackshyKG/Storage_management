@@ -2,6 +2,7 @@ package com.example.management;
 
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -29,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class DocItemActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
+    private int REQUEST_CODE;
     private Switch swOutDoc;
     private TextView docDate;
     private TextView docNumber;
@@ -56,9 +58,10 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
         docNumber = findViewById(R.id.tv_open_number);
 
         Intent intent = getIntent();
-
         newDocument = !intent.hasExtra(getString(R.string.intent_document));
         documentIn = intent.getBooleanExtra(getString(R.string.intent_document_in), true);
+        REQUEST_CODE = newDocument ? DocFragment.REQUEST_CODE_NEW_DOCUMENT : DocFragment.REQUEST_CODE_CURRENT_DOCUMENT;
+
         if (newDocument) {
 
             Date currentDate = new Date();
@@ -91,7 +94,6 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
                 deleteItemFromList(viewHolder.getAdapterPosition());
             }
         }).attachToRecyclerView(recyclerView);
-
 
     }
 
@@ -201,19 +203,18 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
         SQLiteDB sqLiteDB = new SQLiteDB(this);
         SQLiteDatabase database = sqLiteDB.getReadableDatabase();
 
-        if (newDocument) {
+        if (newDocument) {/*Create new*/
 
             newDocument = false;
 
             int newNumber = getNewNumber();
             document = new Document(newNumber, dateInt, timeInt, documentIn, itemList);
 
-        } else {
+        } else {/*delete*/
 
             document.setDate(dateInt);
             document.setTime(timeInt);
             document.setTableList(itemList);
-            // delete
             database.delete("documents", "number = " + document.getNumber(), null);
 
         }
@@ -233,6 +234,10 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
 
         sqLiteDB.close();
         database.close();/* Here. Update list in DocFragment*/
+
+        Intent intent = new Intent();
+        intent.putExtra(getString(R.string.intent_document), document);
+        setResult(REQUEST_CODE,intent);
 
     }
 

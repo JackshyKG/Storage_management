@@ -1,20 +1,15 @@
 package com.example.management;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,9 +21,7 @@ import java.util.Date;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDialogFragment;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,16 +29,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class DocFragment extends Fragment {
 
+    public static final int REQUEST_CODE_DATE_PICKER = 11;
+    public static final int REQUEST_CODE_NEW_DOCUMENT = 12;
+    public static final int REQUEST_CODE_CURRENT_DOCUMENT = 13;
+
     private Button bAdd, bShow;
     private boolean date1Clicked;
     private TextView date1, date2;
     private String argDate1, argDate2;
 
-    private static final int REQUEST_CODE = 11;
-
+    private ArrayList<Document> docList;
     private RecyclerView recyclerView;
     private DocRecyclerAdapter docAdapter;
-    private static ArrayList<Document> docList;
+
+    private int currentDocumentPosition;
 
     @Nullable
     @Override
@@ -125,11 +122,9 @@ public class DocFragment extends Fragment {
 //            cv.put(SQLiteDB.KEY_ITEM,"Сахар");
 //            database.insert(SQLiteDB.TABLE_ITEM, null, cv);
 //            sqLiteDB.close();
-            fillDocList();/*jackshy.
-            При нажатии show проблемы с отображением результата в docList'е.
-            Все правильно отбирается и отправляется в "docAdapter.updateDocListAndNotify(docList)".
-            Но DocRecyclerAdapter выводит неверно, хотя в "onBindViewHolder" заносятся правильные данные!*/
+            fillDocList();
             docAdapter.updateDocListAndNotify(docList);
+
         });
     }
 
@@ -138,25 +133,12 @@ public class DocFragment extends Fragment {
         final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
 
         AppCompatDialogFragment newFragment = new PeriodPickerFragment();
-        newFragment.setTargetFragment(DocFragment.this, REQUEST_CODE);
+        newFragment.setTargetFragment(DocFragment.this, REQUEST_CODE_DATE_PICKER);
         newFragment.show(fragmentManager, "datePicker");
 
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            if (date1Clicked) {
-                date1.setText(data.getStringExtra("stringDate"));
-                argDate1 = data.getStringExtra("argDate");
-            } else {
-                date2.setText(data.getStringExtra("stringDate"));
-                argDate2 = data.getStringExtra("argDate");
-            }
-        }
-
-    }
 
     private void fillDocList() {
 
@@ -224,16 +206,14 @@ public class DocFragment extends Fragment {
     private void recViewOnClickCommands() {
 
         recyclerView.addOnItemTouchListener(
-                new DocRecyclerItemClickListener(getActivity(), new DocRecyclerItemClickListener.OnItemClickListener() {
-                    @Override public void onItemClick(View view, int position) {
+                new DocRecyclerItemClickListener(getActivity(), (view, position) -> {
 
-                        Intent intent = new Intent(getContext(), DocItemActivity.class);
+                    currentDocumentPosition = position;
 
-                        intent.putExtra(getString(R.string.intent_document), docList.get(position));
-                        intent.putExtra(getString(R.string.intent_document_in), docList.get(position).getDocumentIn());
-                        startActivity(intent);
-
-                    }
+                    Intent intent = new Intent(getContext(), DocItemActivity.class);
+                    intent.putExtra(getString(R.string.intent_document), docList.get(position));
+                    intent.putExtra(getString(R.string.intent_document_in), docList.get(position).getDocumentIn());
+                    startActivityForResult(intent, REQUEST_CODE_CURRENT_DOCUMENT);
 
                 })
         );
@@ -241,8 +221,41 @@ public class DocFragment extends Fragment {
     }
 
     public void addDocument() {
+        currentDocumentPosition = -1;
         Intent intent = new Intent(getActivity(), DocItemActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_CODE_NEW_DOCUMENT);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        /*on date picker*/
+        if (requestCode == REQUEST_CODE_DATE_PICKER && resultCode == Activity.RESULT_OK) {
+
+            if (date1Clicked) {
+                date1.setText(data.getStringExtra("stringDate"));
+                argDate1 = data.getStringExtra("argDate");
+            } else {
+                date2.setText(data.getStringExtra("stringDate"));
+                argDate2 = data.getStringExtra("argDate");
+            }
+
+        /*on new document added*/
+        } else if (requestCode == REQUEST_CODE_NEW_DOCUMENT && data != null  && data.hasExtra(getString(R.string.intent_document))) {
+
+            Document document = data.getParcelableExtra(getString(R.string.intent_document));
+            docList.add(document);
+            docAdapter.addDocumentAndNotify();
+
+        /*on document edited*/
+        } else if (requestCode == REQUEST_CODE_CURRENT_DOCUMENT && data != null && data.hasExtra(getString(R.string.intent_document))) {
+
+            Document document = data.getParcelableExtra(getString(R.string.intent_document));
+            docList.set(currentDocumentPosition, document);
+            docAdapter.updateDocumentAndNotify(document, currentDocumentPosition);
+
+        }
+
     }
 
 }

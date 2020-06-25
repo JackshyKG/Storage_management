@@ -23,7 +23,7 @@
     <string name="number_title">Номер:</string>
     <string name="toast_doc_saved">Документ сохранен</string>
 
-    <string name="intent_document_in">documentIn</string>
     <string name="intent_document">document</string>
+    <string name="intent_document_in">documentIn</string>
 
 </resources>

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -68,6 +69,11 @@ public class MainActivity extends AppCompatActivity  {
     private void createAndOpenItemFragment() {
         DocFragment selectedFragment = new DocFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment, selectedFragment).commit();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
 }
