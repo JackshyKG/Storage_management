@@ -13,12 +13,12 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-
-public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapter.ItemViewHolder> {
+public class DocItemsRecyclerAdapter extends RecyclerView.Adapter<DocItemsRecyclerAdapter.ItemViewHolder> {
 
     private Context context;
     private ArrayList<String[]> itemList;
@@ -28,7 +28,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
     private boolean onCreateAdapter = true;
 
 
-    public ItemRecyclerAdapter(Context context, ArrayList<String[]> itemList) {
+    public DocItemsRecyclerAdapter(Context context, ArrayList<String[]> itemList) {
         this.context = context;
         this.itemList = itemList;
         getItemsFromDB();

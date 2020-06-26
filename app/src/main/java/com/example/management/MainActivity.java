@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     private void createAndOpenItemFragment() {
-        DocFragment selectedFragment = new DocFragment();
+        ItemFragment selectedFragment = new ItemFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment, selectedFragment).commit();
     }
 

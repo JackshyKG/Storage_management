@@ -39,7 +39,7 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
     private boolean documentIn;
     private boolean newDocument;
     public ArrayList<String[]> itemList;
-    private ItemRecyclerAdapter itemAdapter;
+    private DocItemsRecyclerAdapter itemAdapter;
     private RecyclerView recyclerView;
 
     @Override
@@ -104,7 +104,7 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
 
-        itemAdapter = new ItemRecyclerAdapter(DocItemActivity.this, itemList);
+        itemAdapter = new DocItemsRecyclerAdapter(DocItemActivity.this, itemList);
         recyclerView.setAdapter(itemAdapter);
 
     }

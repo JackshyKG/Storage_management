@@ -20,7 +20,7 @@ public class ItemFragment extends Fragment {
 
     private RecyclerView recyclerView;
 
-    private static ArrayList<Document> docList;
+    public ArrayList<String[]> itemList;
 
     @Nullable
     @Override
@@ -43,7 +43,7 @@ public class ItemFragment extends Fragment {
 
     private void fillItemList() {
 
-        docList = new ArrayList<>();
+        itemList = new ArrayList<>();
         SQLiteDB sqLiteDB = new SQLiteDB(getContext());
         SQLiteDatabase database = sqLiteDB.getReadableDatabase();
 
