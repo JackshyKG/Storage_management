@@ -2,9 +2,9 @@
 
     <string name="app_name">Management</string>
 
-    <string name="button_documents">Документы</string>
-    <string name="button_items">Товары</string>
-    <string name="button_report">Отчет</string>
+    <string name="button_documents">Documents</string>
+    <string name="button_items">Items</string>
+    <string name="button_report">Report</string>
 
     <string name="sample_doc_number">00000000001</string>
     <string name="sample_doc_date">03.06.2020</string>
@@ -14,14 +14,16 @@
     <string name="sample_date">03.06.2020</string>
     <string name="sample_doc_items">item - 1, item - 2, item - 3, item - 4, item - 5...</string>
 
-    <string name="add_button">добавить</string>
-    <string name="edit_button">изменить</string>
-    <string name="save_button">сохранить</string>
+    <string name="add_button">add</string>
+    <string name="edit_button">edit</string>
+    <string name="save_button">save</string>
+    <string name="delete_anyway_button">delete anyway</string>
+    <string name="cancel_button">cancel</string>
     <string name="show_button">show</string>
 
-    <string name="date_title">Дата:</string>
-    <string name="number_title">Номер:</string>
-    <string name="toast_doc_saved">Документ сохранен</string>
+    <string name="date_title">Date:</string>
+    <string name="number_title">Number:</string>
+    <string name="toast_doc_saved">Document saved</string>
 
     <string name="intent_document">document</string>
     <string name="intent_document_in">documentIn</string>

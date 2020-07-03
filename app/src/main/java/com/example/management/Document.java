@@ -19,7 +19,7 @@ public class Document implements Parcelable {
     private int number;
     private int date;// date of the document, int 20200603 - 03.06.2020 (dd.MM.yyyy)
     private int time;// date of the document, int 1603 - 16:03 (HH:mm)
-    private boolean documentIn;/*if in - true, else false*/
+    private boolean documentIn;/*in - true, out - false*/
     private ArrayList<String[]> tableList;// Document table - item and count (as a String)
 
     public Document(int number, int date, int time, boolean documentIn, ArrayList<String[]> tableList) {

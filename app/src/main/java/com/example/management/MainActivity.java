@@ -1,13 +1,11 @@
 package com.example.management;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
+import com.example.management.Reports.ReportsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
@@ -21,7 +19,7 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
 
         init();
-        createAndOpenDocFragment();
+        openReportFragment();//openDocFragment
 
     }
 
@@ -42,15 +40,15 @@ public class MainActivity extends AppCompatActivity  {
             switch (clickedButtonId) {
 
                 case R.id.b_nav_doc:
-                    createAndOpenDocFragment();
+                    openDocFragment();
                     break;
 
                 case R.id.b_nav_item:
-                    createAndOpenItemFragment();
+                    openItemFragment();
                     break;
 
                 case R.id.b_nav_report:
-
+                    openReportFragment();
                     break;
 
             }
@@ -61,14 +59,16 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
-    private void createAndOpenDocFragment() {
-        DocFragment selectedFragment = new DocFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment, selectedFragment).commit();
+    private void openDocFragment() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment, new DocFragment()).commit();
     }
 
-    private void createAndOpenItemFragment() {
-        ItemFragment selectedFragment = new ItemFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment, selectedFragment).commit();
+    private void openItemFragment() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment, new ItemFragment()).commit();
+    }
+
+    private void openReportFragment() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment, new ReportsFragment()).commit();
     }
 
     @Override

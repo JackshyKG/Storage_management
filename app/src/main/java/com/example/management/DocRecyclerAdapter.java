@@ -59,17 +59,4 @@ public class DocRecyclerAdapter extends RecyclerView.Adapter<DocRecyclerAdapter.
         return docList.size();
     }
 
-    public void updateDocListAndNotify(ArrayList<Document> docList) {
-        this.docList = docList;
-        notifyDataSetChanged();
-    }
-
-    public void updateDocumentAndNotify(Document document, int position) {
-        notifyItemChanged(position);
-    }
-
-    public void addDocumentAndNotify() {
-        notifyItemInserted(docList.size() - 1);
-    }
-
 }

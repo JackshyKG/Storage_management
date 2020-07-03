@@ -201,7 +201,7 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
         int timeInt = Document.getDateOrTimeAsInt(dateString, false);
 
         SQLiteDB sqLiteDB = new SQLiteDB(this);
-        SQLiteDatabase database = sqLiteDB.getReadableDatabase();
+        SQLiteDatabase database = sqLiteDB.getWritableDatabase();
 
         if (newDocument) {/*Create new*/
 
@@ -212,10 +212,17 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
 
         } else {/*delete*/
 
+            int result = database.delete(SQLiteDB.TABLE_DOC, SQLiteDB.KEY_NUMBER + " = " + document.getNumber(), null);
+            if (result < 1) {
+                sqLiteDB.close();
+                Toast.makeText(this, "Couldn't save your changes, please try again", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             document.setDate(dateInt);
             document.setTime(timeInt);
+            document.setDocumentIn(documentIn);
             document.setTableList(itemList);
-            database.delete("documents", "number = " + document.getNumber(), null);
 
         }
 
@@ -233,11 +240,10 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
         }
 
         sqLiteDB.close();
-        database.close();/* Here. Update list in DocFragment*/
 
         Intent intent = new Intent();
         intent.putExtra(getString(R.string.intent_document), document);
-        setResult(REQUEST_CODE,intent);
+        setResult(REQUEST_CODE, intent);
 
     }
 
@@ -265,7 +271,7 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
     }
 
 
-    public void onClickAddItem(View v) {
+    public void onDocClickAddItem(View v) {
         itemList.add(new String[3]);
         itemAdapter.notifyDataSetChanged();
     }

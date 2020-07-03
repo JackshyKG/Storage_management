@@ -17,12 +17,11 @@
             android:id="@+id/tv_doc_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:padding="2dp"
             android:text="@string/sample_doc_number"
             android:textColor="@color/colorBlack"
-            android:textSize="24sp"
-            android:padding="2dp"
-            android:layout_alignParentTop="true"
-            />
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/tv_doc_date"

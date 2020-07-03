@@ -62,6 +62,9 @@ public class DocFragment extends Fragment {
 
         bAdd = rootView.findViewById(R.id.b_add_document);
         bShow = rootView.findViewById(R.id.b_show);
+
+        docList = new ArrayList<>();
+
         initButtons();
         fillDocList();
 
@@ -123,7 +126,7 @@ public class DocFragment extends Fragment {
 //            database.insert(SQLiteDB.TABLE_ITEM, null, cv);
 //            sqLiteDB.close();
             fillDocList();
-            docAdapter.updateDocListAndNotify(docList);
+            docAdapter.notifyDataSetChanged();
 
         });
     }
@@ -142,13 +145,13 @@ public class DocFragment extends Fragment {
 
     private void fillDocList() {
 
-        docList = new ArrayList<>();
+        docList.clear();
         SQLiteDB sqLiteDB = new SQLiteDB(getContext());
         SQLiteDatabase database = sqLiteDB.getReadableDatabase();
 
         String tableQuery = "documents as DOC inner join items as IT on DOC.item = IT._id";
         String[] columns = {"number as Number", "date as Date", "IT.item as Item", "count as Count", "time as Time"};
-        String selections = "Date BETWEEN ? AND ?";/*Here. show button*/
+        String selections = "Date BETWEEN ? AND ?";
         String[] selectionsArgs = new String[] {argDate1, argDate2};
         Cursor cursor = database.query(tableQuery, columns, selections, selectionsArgs, null, null, "Number");
 
@@ -245,14 +248,14 @@ public class DocFragment extends Fragment {
 
             Document document = data.getParcelableExtra(getString(R.string.intent_document));
             docList.add(document);
-            docAdapter.addDocumentAndNotify();
+            docAdapter.notifyItemInserted(docList.size() - 1);
 
         /*on document edited*/
         } else if (requestCode == REQUEST_CODE_CURRENT_DOCUMENT && data != null && data.hasExtra(getString(R.string.intent_document))) {
 
             Document document = data.getParcelableExtra(getString(R.string.intent_document));
             docList.set(currentDocumentPosition, document);
-            docAdapter.updateDocumentAndNotify(document, currentDocumentPosition);
+            docAdapter.notifyItemChanged(currentDocumentPosition);
 
         }
 

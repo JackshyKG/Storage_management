@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/ll_report_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/ll_selection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="4dp"
+            android:background="@drawable/linear_layout_border_lines">
+
+            <TextView
+                android:id="@+id/tv_report_date_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginLeft="6dp"
+                android:clickable="true"
+                android:text="@string/sample_date"
+                android:layout_gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/tv_between_dates"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:text=" - "
+                android:layout_gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/tv_report_date_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:text="@string/sample_date"
+                android:layout_gravity="center"
+                />
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:background="@drawable/linear_layout_border_lines">
+
+            <Switch
+                android:id="@+id/sw_report_type"
+                android:layout_width="160dp"
+                android:layout_height="5dp"
+                android:text="Transaction"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="6dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="Remaining"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                />
+
+            <ImageButton
+                android:id="@+id/ib_report"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_form_report"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:background="@drawable/linear_layout_border_lines">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/ic_search_item"
+                android:layout_gravity="center"
+                />
+
+            <EditText
+                android:id="@+id/et_search_report"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_reports"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/ll_report_top"
+        android:padding="4dp"
+        android:background="@android:color/darker_gray">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+</RelativeLayout>

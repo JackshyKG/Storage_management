@@ -21,123 +21,57 @@ import java.util.ArrayList;
 public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapter.ItemViewHolder> {
 
     private Context context;
-    private ArrayList<String[]> itemList;
+    private ArrayList<String[]> itemList;/*0 - id, 1 - name*/
 
-    private String[] allItems;
-    private ArrayAdapter<String> adapter;
-    private boolean onCreateAdapter = true;
+    private OnItemClickListener mListener;
 
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
+    }
 
     public ItemRecyclerAdapter(Context context, ArrayList<String[]> itemList) {
         this.context = context;
         this.itemList = itemList;
-        getItemsFromDB();
     }
 
-    public class ItemViewHolder extends RecyclerView.ViewHolder {
+    public static class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView tvEnum;
-        public AutoCompleteTextView acItem;
-        public EditText etCount;
+        public TextView tvId, tvName;
 
-        public ItemViewHolder(@NonNull View itemView) {
+        public ItemViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
 
-            tvEnum = itemView.findViewById(R.id.tv_item_enum);
-            acItem = itemView.findViewById(R.id.ac_tv_item);
-            etCount = itemView.findViewById(R.id.et_count);
+            tvId = itemView.findViewById(R.id.tv_item_id);
+            tvName = itemView.findViewById(R.id.tv_item_name);
 
-            adapter = new ArrayAdapter<>(context,android.R.layout.simple_list_item_1, allItems);
-            acItem.setAdapter(adapter);
-            acItem.setThreshold(2);
-
-            acItem.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-                @Override
-                public void afterTextChanged(Editable s) {
-
-                    if (onCreateAdapter) {
-                        return;
+            itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(position);
                     }
-                    itemList.get(getAdapterPosition())[0] = s.toString();
-
-                }
-
-            });
-            acItem.setOnFocusChangeListener((v, hasFocus) -> {
-                if (onCreateAdapter) {
-                    onCreateAdapter = false;
-                }
-            });
-
-            etCount.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-                @Override
-                public void afterTextChanged(Editable s) {
-
-                    if (onCreateAdapter) {
-                        return;
-                    }
-                    itemList.get(getAdapterPosition())[1] = s.toString();
-
-                }
-            });
-            etCount.setOnFocusChangeListener((v, hasFocus) -> {
-                if (onCreateAdapter) {
-                    onCreateAdapter = false;
                 }
             });
 
         }
-    }
-
-    private void getItemsFromDB() {
-
-        SQLiteDB sqLiteDB = new SQLiteDB(context);
-        SQLiteDatabase database = sqLiteDB.getReadableDatabase();
-
-        String table = "items";
-        String[] columns = {"item"};
-        Cursor cursor = database.query(table, columns, null, null, null, null, null);
-
-        allItems = new String[cursor.getCount()];
-
-        if (cursor.moveToFirst()) {
-            int iIndex = cursor.getColumnIndex("item");
-            do {
-                allItems[cursor.getPosition()] = cursor.getString(iIndex);
-            } while (cursor.moveToNext());
-        }
-
-        return;
-
     }
 
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.open_table_items, parent, false);
-        return new ItemViewHolder(view);
-
+        View view = inflater.inflate(R.layout.item_recycler_items, parent, false);
+        return new ItemViewHolder(view, mListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        holder.tvEnum.setText(position + 1 + ".");
-        holder.acItem.setText(itemList.get(position)[0]);
-        holder.etCount.setText(itemList.get(position)[1]);
+        holder.tvId.setText(itemList.get(position)[0]);
+        holder.tvName.setText(itemList.get(position)[1]);
     }
 
     @Override

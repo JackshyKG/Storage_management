@@ -106,20 +106,17 @@ public class DocItemsRecyclerAdapter extends RecyclerView.Adapter<DocItemsRecycl
         SQLiteDB sqLiteDB = new SQLiteDB(context);
         SQLiteDatabase database = sqLiteDB.getReadableDatabase();
 
-        String table = "items";
-        String[] columns = {"item"};
-        Cursor cursor = database.query(table, columns, null, null, null, null, null);
+        String[] columns = {SQLiteDB.KEY_ITEM};
+        Cursor cursor = database.query(SQLiteDB.TABLE_ITEM, columns, null, null, null, null, null);
 
         allItems = new String[cursor.getCount()];
 
         if (cursor.moveToFirst()) {
-            int iIndex = cursor.getColumnIndex("item");
+            int iIndex = cursor.getColumnIndex(SQLiteDB.KEY_ITEM);
             do {
                 allItems[cursor.getPosition()] = cursor.getString(iIndex);
             } while (cursor.moveToNext());
         }
-
-        return;
 
     }
 
