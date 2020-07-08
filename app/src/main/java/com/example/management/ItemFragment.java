@@ -1,7 +1,6 @@
 package com.example.management;
 
 import android.content.ContentValues;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -10,10 +9,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -25,12 +21,14 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 public class ItemFragment extends Fragment implements ItemDialog.OnSaveClicked {
 
 
     public static final int REQUEST_CODE_OPEN_DIALOG = 14;
 
-    private ImageButton ibAddItem;
+    private FloatingActionButton fabAddItem;
     private RecyclerView recyclerView;
     private ItemRecyclerAdapter itemAdapter;
     private EditText etSearch;
@@ -46,7 +44,7 @@ public class ItemFragment extends Fragment implements ItemDialog.OnSaveClicked {
         fillItemList("");
 
         View rootView = inflater.inflate(R.layout.item_recycler_view, container, false);
-        ibAddItem = rootView.findViewById(R.id.ib_add_item);
+        fabAddItem = rootView.findViewById(R.id.fab_add_item);
         recyclerView = rootView.findViewById(R.id.rv_items);
         etSearch = rootView.findViewById(R.id.et_search);
 
@@ -122,7 +120,7 @@ public class ItemFragment extends Fragment implements ItemDialog.OnSaveClicked {
 
         }).attachToRecyclerView(recyclerView);/*DELETE ROW ON SWIPE (to right)*/
 
-        ibAddItem.setOnClickListener(v -> {
+        fabAddItem.setOnClickListener(v -> {
             currentPosition = -1;
             openDialog(-1, "", false);
         });
@@ -167,7 +165,7 @@ public class ItemFragment extends Fragment implements ItemDialog.OnSaveClicked {
         if (!deleteRows) {/*just to show dialog*/
             Cursor cursor = database.query(SQLiteDB.TABLE_DOC, null, SQLiteDB.KEY_ITEM_ID+"="+idDelete,null, null, null, null, null);
             rows = cursor.getCount();
-
+            cursor.close();
         } else {/*delete if clicked DELETE ANYWAY*/
 
             rows = database.delete(SQLiteDB.TABLE_DOC, SQLiteDB.KEY_ITEM_ID+"="+idDelete, null);
@@ -222,6 +220,7 @@ public class ItemFragment extends Fragment implements ItemDialog.OnSaveClicked {
         String[] selectionArgs = new String[]{name};
         Cursor cursor = database.query(SQLiteDB.TABLE_ITEM, null, selection, selectionArgs, null, null, null);
         if (cursor.moveToFirst()) {
+            cursor.close();
             sqLiteDB.close();
             Toast.makeText(getActivity(), "Item with the same name is already exists!", Toast.LENGTH_SHORT).show();
             return;
@@ -254,6 +253,7 @@ public class ItemFragment extends Fragment implements ItemDialog.OnSaveClicked {
             }
 
         }
+        cursor.close();
         sqLiteDB.close();
 
     }

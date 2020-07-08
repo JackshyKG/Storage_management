@@ -116,15 +116,17 @@ public class Document implements Parcelable {
 
             asString = asString + str[0] + " - " + str[1]+", ";
 
-            if (asString.length() >= MAX_LENGTH_AS_STRING) {
-                break;
+            if (asString.length() > MAX_LENGTH_AS_STRING) {
+                asString = asString.substring(0, MAX_LENGTH_AS_STRING + 1).concat("...");
+                return asString;
             }
 
         }
 
         if (asString != null && asString.length() > 0) {
-            asString = asString.substring(0, asString.length() - 2).concat("...");
+            asString = asString.substring(0, asString.length() - 2);
         }
+
         return asString;
     }
 
@@ -165,7 +167,6 @@ public class Document implements Parcelable {
 
 
     /*---PARCELABLE---*/
-
     protected Document(Parcel in) {
         number = in.readInt();
         date = in.readInt();

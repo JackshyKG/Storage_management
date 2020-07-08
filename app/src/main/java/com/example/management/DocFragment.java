@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +23,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class DocFragment extends Fragment {
 
@@ -33,7 +35,8 @@ public class DocFragment extends Fragment {
     public static final int REQUEST_CODE_NEW_DOCUMENT = 12;
     public static final int REQUEST_CODE_CURRENT_DOCUMENT = 13;
 
-    private Button bAdd, bShow;
+    private Button bShow;
+    private FloatingActionButton fabAdd;
     private boolean date1Clicked;
     private TextView date1, date2;
     private String argDate1, argDate2;
@@ -60,7 +63,7 @@ public class DocFragment extends Fragment {
             return null;
         }
 
-        bAdd = rootView.findViewById(R.id.b_add_document);
+        fabAdd = rootView.findViewById(R.id.fab_add_doc);
         bShow = rootView.findViewById(R.id.b_show);
 
         docList = new ArrayList<>();
@@ -73,7 +76,7 @@ public class DocFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         docAdapter = new DocRecyclerAdapter(getActivity(), docList);
         recyclerView.setAdapter(docAdapter);
-        recViewOnClickCommands();
+        recViewCommands();
         return rootView;
 
     }
@@ -111,20 +114,10 @@ public class DocFragment extends Fragment {
 
     private void initButtons() {
 
-        bAdd.setOnClickListener(v -> {
+        fabAdd.setOnClickListener(v -> {
             addDocument();
         });
         bShow.setOnClickListener(v -> {
-//            SQLiteDB sqLiteDB = new SQLiteDB(getContext());
-//            SQLiteDatabase database = sqLiteDB.getWritableDatabase();
-//            ContentValues cv = new ContentValues();
-//            cv.put(SQLiteDB.KEY_ITEM,"Хлеб");
-//            database.insert(SQLiteDB.TABLE_ITEM, null, cv);
-//            cv.put(SQLiteDB.KEY_ITEM,"Соль");
-//            database.insert(SQLiteDB.TABLE_ITEM, null, cv);
-//            cv.put(SQLiteDB.KEY_ITEM,"Сахар");
-//            database.insert(SQLiteDB.TABLE_ITEM, null, cv);
-//            sqLiteDB.close();
             fillDocList();
             docAdapter.notifyDataSetChanged();
 
@@ -206,10 +199,9 @@ public class DocFragment extends Fragment {
 
     }
 
-    private void recViewOnClickCommands() {
+    private void recViewCommands() {
 
-        recyclerView.addOnItemTouchListener(
-                new DocRecyclerItemClickListener(getActivity(), (view, position) -> {
+        recyclerView.addOnItemTouchListener(new DocRecyclerItemClickListener(getActivity(), (view, position) -> {
 
                     currentDocumentPosition = position;
 
@@ -218,8 +210,31 @@ public class DocFragment extends Fragment {
                     intent.putExtra(getString(R.string.intent_document_in), docList.get(position).getDocumentIn());
                     startActivityForResult(intent, REQUEST_CODE_CURRENT_DOCUMENT);
 
-                })
-        );
+                }));
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+                int rows;
+                int currentPosition = viewHolder.getAdapterPosition();
+
+                SQLiteDB sqLiteDB = new SQLiteDB(getActivity());
+                SQLiteDatabase database = sqLiteDB.getReadableDatabase();
+
+                rows = database.delete(SQLiteDB.TABLE_DOC, SQLiteDB.KEY_NUMBER+"="+docList.get(currentPosition).getNumber(), null);
+                if (rows < 1) {
+                    Toast.makeText(getActivity(), "Couldn't delete document, please try again", Toast.LENGTH_SHORT).show();
+                }
+                sqLiteDB.close();
+
+            }
+        }).attachToRecyclerView(recyclerView);/*DELETE ROW ON SWIPE (to right)*/
 
     }
 

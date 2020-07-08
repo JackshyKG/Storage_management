@@ -7,45 +7,50 @@
     app:cardCornerRadius="4dp"
     android:layout_marginBottom="4dp">
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="4dp"
-        >
+        android:layout_height="wrap_content"
+        android:background="@drawable/card_edge">
 
-        <TextView
-            android:id="@+id/tv_doc_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:padding="2dp"
-            android:text="@string/sample_doc_number"
-            android:textColor="@color/colorBlack"
-            android:textSize="24sp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="4dp"
+            android:background="?android:attr/windowBackground">
 
-        <TextView
-            android:id="@+id/tv_doc_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/sample_doc_date"
-            android:textColor="@color/colorBlack"
-            android:textSize="20sp"
-            android:layout_alignParentRight="true"
-            android:layout_marginEnd="2dp"
-            />
+            <TextView
+                android:id="@+id/tv_doc_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:padding="2dp"
+                android:text="@string/sample_doc_number"
+                android:textColor="@color/colorBlack"
+                android:textSize="24sp" />
 
-        <TextView
-            android:id="@+id/tv_doc_items"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/sample_doc_items"
-            android:textColor="@color/colorGrey"
-            android:layout_below="@+id/tv_doc_number"
-            android:layout_marginStart="10dp"
-            />
+            <TextView
+                android:id="@+id/tv_doc_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sample_doc_date"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="2dp"
+                />
 
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/tv_doc_items"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sample_doc_items"
+                android:textColor="@color/colorGrey"
+                android:layout_below="@+id/tv_doc_number"
+                android:layout_marginStart="10dp"
+                />
 
+        </RelativeLayout>
 
+    </FrameLayout>
 
 </androidx.cardview.widget.CardView>

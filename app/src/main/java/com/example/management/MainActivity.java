@@ -1,6 +1,8 @@
 package com.example.management;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +14,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class MainActivity extends AppCompatActivity  {
 
     private int clickedButtonId;
+    private Fragment activeFragment;
+    private DocFragment docFragment;
+    private ItemFragment itemFragment;
+    private ReportsFragment reportsFragment;
+    private FragmentManager supportFM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,20 +26,28 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
 
         init();
-        openReportFragment();//openDocFragment
 
     }
 
     private void init() {
 
         clickedButtonId = R.id.b_nav_doc;
+        docFragment = new DocFragment();
+        itemFragment = new ItemFragment();
+        reportsFragment = new ReportsFragment();
+        activeFragment = docFragment;
+
+        supportFM = getSupportFragmentManager();
+        supportFM.beginTransaction().add(R.id.main_fragment, docFragment).
+                                     add(R.id.main_fragment, itemFragment).hide(itemFragment).
+                                     add(R.id.main_fragment, reportsFragment).hide(reportsFragment).commit();
 
         // bottom navigation on item selected listener
         BottomNavigationView bnvMain = findViewById(R.id.bnv_main);
         bnvMain.setOnNavigationItemSelectedListener(item -> {
 
             if (item.getItemId() == clickedButtonId) {
-                return false;// Повторна нажата та же кнопка, что и в последний раз
+                return false;/* Last item was clicked, nothing to change */
             }
 
             clickedButtonId = item.getItemId();
@@ -40,15 +55,18 @@ public class MainActivity extends AppCompatActivity  {
             switch (clickedButtonId) {
 
                 case R.id.b_nav_doc:
-                    openDocFragment();
+                    supportFM.beginTransaction().hide(activeFragment).show(docFragment).commit();
+                    activeFragment = docFragment;
                     break;
 
                 case R.id.b_nav_item:
-                    openItemFragment();
+                    supportFM.beginTransaction().hide(activeFragment).show(itemFragment).commit();
+                    activeFragment = itemFragment;
                     break;
 
                 case R.id.b_nav_report:
-                    openReportFragment();
+                    supportFM.beginTransaction().hide(activeFragment).show(reportsFragment).commit();
+                    activeFragment = reportsFragment;
                     break;
 
             }
@@ -57,18 +75,6 @@ public class MainActivity extends AppCompatActivity  {
 
         });
 
-    }
-
-    private void openDocFragment() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment, new DocFragment()).commit();
-    }
-
-    private void openItemFragment() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment, new ItemFragment()).commit();
-    }
-
-    private void openReportFragment() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment, new ReportsFragment()).commit();
     }
 
     @Override

@@ -2,13 +2,11 @@ package com.example.management;
 
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.strictmode.SqliteObjectLeakedViolation;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.Switch;
@@ -17,7 +15,6 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 
 import androidx.annotation.NonNull;
@@ -32,12 +29,10 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
 
     private int REQUEST_CODE;
     private Switch swOutDoc;
-    private TextView docDate;
-    private TextView docNumber;
+    private TextView docDate, docNumber;
 
     private Document document;
-    private boolean documentIn;
-    private boolean newDocument;
+    private boolean documentIn, newDocument;
     public ArrayList<String[]> itemList;
     private DocItemsRecyclerAdapter itemAdapter;
     private RecyclerView recyclerView;
@@ -68,7 +63,7 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
             SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
             String strDate = format.format(currentDate);
             docDate.setText(strDate);
-            swOutDoc.setChecked(false);/*In as default*/
+            swOutDoc.setChecked(true);/*In as default*/
             itemList = new ArrayList<>();
 
         } else {
@@ -77,7 +72,7 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
             docNumber.setText(String.valueOf(document.getNumber()));
             docDate.setText(document.getDateAsStringType());
             itemList = document.getTableList();
-            swOutDoc.setChecked(!documentIn);
+            swOutDoc.setChecked(documentIn);
 
         }
         fillTable();
@@ -132,7 +127,7 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
             }
         }
 
-        documentIn = !swOutDoc.isChecked();
+        documentIn = swOutDoc.isChecked();
         new saveDocumentTask().execute();
     }
 
@@ -208,6 +203,7 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
             newDocument = false;
 
             int newNumber = getNewNumber();
+            docNumber.setText(String.valueOf(newNumber));
             document = new Document(newNumber, dateInt, timeInt, documentIn, itemList);
 
         } else {/*delete*/

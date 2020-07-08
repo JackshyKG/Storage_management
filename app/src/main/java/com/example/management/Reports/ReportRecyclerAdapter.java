@@ -1,12 +1,15 @@
 package com.example.management.Reports;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.management.R;
@@ -53,9 +56,17 @@ public class ReportRecyclerAdapter extends RecyclerView.Adapter<ReportRecyclerAd
 
     @Override
     public void onBindViewHolder(@NonNull ReportViewHolder holder, int position) {
+
         holder.tvItem.setText(reportList.get(position)[0]);
         holder.income.setText(reportList.get(position)[1]);
         holder.outgo.setText(reportList.get(position)[2]);
+
+        if (reportList.get(position)[1].isEmpty()) {
+            holder.outgo.setTextColor(Integer.parseInt(reportList.get(position)[2]) > 0 ? context.getResources().getColor(R.color.colorPrimaryDark) : context.getResources().getColor(R.color.design_default_color_error));
+        } else {
+            holder.outgo.setTextColor(context.getResources().getColor(R.color.design_default_color_error));
+        }
+
     }
 
     @Override

@@ -21,7 +21,7 @@ public class DocRecyclerAdapter extends RecyclerView.Adapter<DocRecyclerAdapter.
         this.docList = docList;
     }
 
-    public class DocViewHolder extends RecyclerView.ViewHolder {
+    public static class DocViewHolder extends RecyclerView.ViewHolder {
 
         public TextView tvDocNumber;
         public TextView tvDocItems;
@@ -43,7 +43,7 @@ public class DocRecyclerAdapter extends RecyclerView.Adapter<DocRecyclerAdapter.
 
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.doc_recycler_items, parent, false);
-        return new DocViewHolder(view);
+        return new DocRecyclerAdapter.DocViewHolder(view);
 
     }
 
@@ -51,6 +51,7 @@ public class DocRecyclerAdapter extends RecyclerView.Adapter<DocRecyclerAdapter.
     public void onBindViewHolder(@NonNull DocViewHolder holder, int position) {
         holder.tvDocNumber.setText(String.valueOf(docList.get(position).getNumber()));
         holder.tvDocItems.setText(docList.get(position).getTableListAsString());
+        holder.tvDocItems.setTextColor(docList.get(position).getDocumentIn() ? context.getResources().getColor(R.color.DarkGreen) : context.getResources().getColor(R.color.DarkRed));
         holder.tvDocDate.setText(docList.get(position).getDateAsStringType());
     }
 

@@ -11,12 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,9 +23,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.management.DocFragment;
 import com.example.management.Document;
-import com.example.management.ItemRecyclerAdapter;
 import com.example.management.PeriodPickerFragment;
 import com.example.management.R;
 import com.example.management.SQLiteDB;
@@ -44,7 +39,7 @@ public class ReportsFragment extends Fragment {
     public static final int REQUEST_CODE_DATE_PICKER = 14;
 
     private Switch swReportType;
-    private ImageButton formButton;
+    private Button formButton;
     private TextView date1, tvBetween, date2;
     private EditText etSearchReport;
     private RecyclerView recyclerView;
@@ -52,6 +47,7 @@ public class ReportsFragment extends Fragment {
 
     private boolean date1Clicked;
     private boolean reportType;/*true - Remaining, false - Transaction*/
+    private boolean formButtonClicked;
     private String argDate1, argDate2;
     private ArrayList<String[]> reportList;/*0 - item, 1 - count income, 2 - count outgo(or remaining)*/
 
@@ -84,9 +80,13 @@ public class ReportsFragment extends Fragment {
         String dateString1;
         String dateString2;
 
-        Date date = new Date();
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-        dateString2 = format.format(date);
+        if (argDate2 == null) {
+            Date date = new Date();
+            dateString2 = format.format(date);
+        } else {
+            dateString2 = argDate1;
+        }
 
         Calendar c = Calendar.getInstance();
         c.setTime(format.parse(dateString2));
@@ -126,41 +126,38 @@ public class ReportsFragment extends Fragment {
             reportType = isChecked;
 
             if (reportType) {
-                date2.setVisibility(View.INVISIBLE);
-                tvBetween.setVisibility(View.INVISIBLE);
+                date1.setVisibility(View.GONE);
+                tvBetween.setVisibility(View.GONE);
             } else {
-                date2.setVisibility(View.VISIBLE);
+                date1.setVisibility(View.VISIBLE);
                 tvBetween.setVisibility(View.VISIBLE);
             }
 
         });
         formButton.setOnClickListener(v -> {
+            formButtonClicked = true;
             formReport();
+
         });
         etSearchReport.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                if (before > count && s.length() < 2) {
-//                    fillReportList("");
-//                    reportAdapter.notifyDataSetChanged();
-//                }
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
             public void afterTextChanged(Editable s) {
 
-//                if (s.toString().trim().isEmpty()) {
-//                    s.clear();
-//                }
-//
-//                String str = s.toString();
-//                if (str.trim().length() > 1) {
-//                    fillReportList(str);
-//                    reportAdapter.notifyDataSetChanged();
-//                }
+                if (s.toString().trim().isEmpty()) {
+                    s.clear();
+                    return;
+                } else if (!formButtonClicked) {
+                    return;
+                }
+
+                formReport();
+                reportAdapter.notifyDataSetChanged();
 
             }
 
@@ -180,10 +177,17 @@ public class ReportsFragment extends Fragment {
 
     private void formReport() {
 
+        reportList.clear();
+
+        String etString = etSearchReport.getText().toString().trim();
+        if (etString.length() < 2) {
+            etString = "";
+        }
+
         if (reportType) {
-            reportRemaining(etSearchReport.toString().trim());
+            reportRemaining(etString);
         } else {
-            reportTransaction(etSearchReport.toString().trim());/*Jack. EditText*/
+            reportTransaction(etString);
         }
         reportAdapter.notifyDataSetChanged();
 
@@ -195,19 +199,17 @@ public class ReportsFragment extends Fragment {
         SQLiteDatabase database = sqLiteDB.getReadableDatabase();
 
         String tableQuery = "documents as doc inner join items as it on doc.item = it._id";
-        String[] columns = {"it.item", "SUM(count)"};
-        String selections = "doc.date <= ?" + (selectedString.isEmpty() ? "" : " AND it.item LIKE " + selectedString);
-        String[] selectionsArgs = new String[] {argDate1};
-        Cursor cursor = database.query(tableQuery, columns, selections, selectionsArgs, "item", null, "item");
+        String[] columns = {"it.item AS Item", "SUM(count) AS Count"};
+        String selections = "doc.date <= ? AND it.item LIKE ?";
+        String[] selectionsArgs = new String[] {argDate2, "%" + selectedString + "%"};
+        Cursor cursor = database.query(tableQuery, columns, selections, selectionsArgs, "it.item", null, "item");
 
         if (cursor.moveToFirst()) {
 
-            int itemIndex = cursor.getColumnIndex("item");
-            int countIndex = cursor.getColumnIndex("count");
+            int itemIndex = cursor.getColumnIndex("Item");
+            int countIndex = cursor.getColumnIndex("Count");
 
-            String itemString = cursor.getString(itemIndex);
-            String countString = String.valueOf(cursor.getInt(countIndex));
-            reportList.add(new String[]{itemString,"",countString});
+            String itemString, countString;
 
             do {
                 itemString = cursor.getString(itemIndex);
@@ -217,7 +219,7 @@ public class ReportsFragment extends Fragment {
             } while (cursor.moveToNext());
 
         }
-
+        cursor.close();
         sqLiteDB.close();
 
     }
@@ -227,34 +229,19 @@ public class ReportsFragment extends Fragment {
         SQLiteDB sqLiteDB = new SQLiteDB(getContext());
         SQLiteDatabase database = sqLiteDB.getReadableDatabase();
 
-        /* Bad query
-        SELECT income.item, IFNULL(isum, 0) AS resisum, IFNULL(osum, 0) AS resosum
-
-FROM (SELECT it.item, SUM(IFNULL(count,0)) AS isum
-    FROM items AS it LEFT JOIN (SELECT item, count FROM documents WHERE date BETWEEN ? AND ? AND count > 0) AS doc
-    ON it._id = doc.item
-    GROUP BY it.item) income
-
-LEFT JOIN (SELECT osum, item
-
-FROM (SELECT it.item, SUM(IFNULL(cplus,0)) AS osum
-    FROM items AS it LEFT JOIN (SELECT item, count*-1 AS cplus FROM documents WHERE date BETWEEN ? AND ? AND count < 0) AS doc
-    ON it._id = doc.item
-    GROUP BY it.item)) outgo ON income.item = outgo.item
-    WHERE resisum > 0 OR resosum > 0*/
-        String sqlString = "SELECT item, SUM(iSum), SUM(oSum)"
-                +" FROM (SELECT it.item, SUM(count) AS isum, 0 AS osum"
+        String sqlString = "SELECT item, SUM(iSum) AS iSum, SUM(oSum) AS oSum"
+                +" FROM (SELECT it.item, SUM(count) AS iSum, 0 AS oSum"
                 +" FROM (SELECT item, count FROM documents WHERE date BETWEEN ? AND ? AND count > 0) AS doc LEFT JOIN items AS it"
                 +" ON doc.item = it._id"
                 +" GROUP BY it.item"
                 +" UNION ALL"
-                +" SELECT it.item, 0 AS isum, SUM(cplus) AS osum"
+                +" SELECT it.item, 0 AS iSum, SUM(cplus) AS oSum"
                 +" FROM (SELECT item, count * -1 AS cplus FROM documents WHERE date BETWEEN ? AND ? AND count < 0) AS doc LEFT JOIN items AS it"
                 +" ON doc.item = it._id"
                 +" GROUP BY it.item)"
-                +(selectedString.isEmpty() ? "" : " WHERE item LIKE " + selectedString)
+                +" WHERE item LIKE ?"
                 +" GROUP BY item";
-        String[] selectionArgs = new String[]{argDate1, argDate2, argDate1, argDate2};
+        String[] selectionArgs = new String[]{argDate1, argDate2, argDate1, argDate2, "%" + selectedString + "%"};
         Cursor cursor = database.rawQuery(sqlString, selectionArgs);
 
         if (cursor.moveToFirst()) {
@@ -263,10 +250,7 @@ FROM (SELECT it.item, SUM(IFNULL(cplus,0)) AS osum
             int iSumIndex = cursor.getColumnIndex("iSum");
             int oSumIndex = cursor.getColumnIndex("oSum");
 
-            String itemString = cursor.getString(itemIndex);
-            String iSumString = String.valueOf(cursor.getInt(iSumIndex));
-            String oSumString = String.valueOf(cursor.getInt(oSumIndex));
-            reportList.add(new String[]{itemString, iSumString ,oSumString});
+            String itemString, iSumString, oSumString;
 
             do {
 
@@ -278,7 +262,7 @@ FROM (SELECT it.item, SUM(IFNULL(cplus,0)) AS osum
             } while (cursor.moveToNext());
 
         }
-
+        cursor.close();
         sqLiteDB.close();
 
     }
