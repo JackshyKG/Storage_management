@@ -56,8 +56,6 @@ public class DocRecyclerAdapter extends RecyclerView.Adapter<DocRecyclerAdapter.
     }
 
     @Override
-    public int getItemCount() {
-        return docList.size();
-    }
+    public int getItemCount() { return docList.size(); }
 
 }

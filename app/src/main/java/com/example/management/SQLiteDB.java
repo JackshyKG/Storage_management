@@ -11,18 +11,18 @@ public class SQLiteDB extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "mainDB";
 
-    // Документы - TABLE_DOC
+    // Documents - TABLE_DOC
     public static final String TABLE_DOC = "documents";
-    public static final String KEY_ID = "_id";// id для таблицы TABLE_DOC и TABLE_ITEM
-    public static final String KEY_NUMBER = "number";// номер документа
-    public static final String KEY_DATE = "date";// дата документа
-    public static final String KEY_TIME = "time";// дата документа
-    public static final String KEY_ITEM_ID = "item";// id товара
-    public static final String KEY_COUNT = "count";// количество товара
+    public static final String KEY_ID = "_id";// id for both tables (TABLE_DOC & TABLE_ITEM)
+    public static final String KEY_NUMBER = "number";// number of document
+    public static final String KEY_DATE = "date";
+    public static final String KEY_TIME = "time";
+    public static final String KEY_ITEM_ID = "item";// item id
+    public static final String KEY_COUNT = "count";
 
-    // Товары - TABLE_ITEM
+    // Items - TABLE_ITEM
     public static final String TABLE_ITEM = "items";
-    public static final String KEY_ITEM = "item";// название товара
+    public static final String ITEM_NAME = "item";
 
 
 
@@ -38,7 +38,7 @@ public class SQLiteDB extends SQLiteOpenHelper {
                 + KEY_COUNT + " integer" + ")");
 
         db.execSQL("create table " + TABLE_ITEM + "(" + KEY_ID + " integer primary key,"
-                + KEY_ITEM + " text" + ")");
+                + ITEM_NAME + " text" + ")");
 
     }
 

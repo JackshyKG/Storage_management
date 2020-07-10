@@ -5,14 +5,11 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.DatePicker;
 
 import androidx.appcompat.app.AppCompatDialogFragment;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 
 public class PeriodPickerFragment extends AppCompatDialogFragment implements DatePickerDialog.OnDateSetListener {
 
@@ -42,12 +39,12 @@ public class PeriodPickerFragment extends AppCompatDialogFragment implements Dat
         }
 
         String argDate = year + "" + monthString + dayString;
-        String stringDate = dayString + "." + monthString + "." + year;
+        String dateAsString = dayString + "." + monthString + "." + year;
 
         getTargetFragment().onActivityResult(
                 getTargetRequestCode(),
                 Activity.RESULT_OK,
-                new Intent().putExtra("stringDate", stringDate).putExtra("argDate", argDate)
+                new Intent().putExtra(getString(R.string.m_date_as_string), dateAsString).putExtra(getString(R.string.m_argument_date), argDate)
         );
     }
 

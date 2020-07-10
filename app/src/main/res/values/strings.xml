@@ -1,10 +1,6 @@
 <resources>
 
-    <string name="app_name">Management</string>
-
-    <string name="button_documents">Documents</string>
-    <string name="button_items">Items</string>
-    <string name="button_report">Report</string>
+    <string name="app_name">Mini warehouse</string>
 
     <string name="sample_doc_number">00000000001</string>
     <string name="sample_doc_date">03.06.2020</string>
@@ -13,6 +9,7 @@
     <string name="sample_date_time">03.06.2020 16:22</string>
     <string name="sample_date">03.06.2020</string>
     <string name="sample_doc_items">item - 1, item - 2, item - 3, item - 4, item - 5...</string>
+    <string name="sample_numbering">1.</string>
 
     <string name="add_button">add</string>
     <string name="edit_button">edit</string>
@@ -20,12 +17,38 @@
     <string name="delete_anyway_button">delete anyway</string>
     <string name="cancel_button">cancel</string>
     <string name="show_button">show</string>
+    <string name="button_documents">Documents</string>
+    <string name="button_items">Items</string>
+    <string name="button_report">Report</string>
 
     <string name="date_title">Date:</string>
     <string name="number_title">Number:</string>
+
     <string name="toast_doc_saved">Document saved</string>
 
     <string name="intent_document">document</string>
     <string name="intent_document_in">documentIn</string>
+
+    <string name="activity_transaction">Transaction</string>
+    <string name="activity_remaining">Remaining</string>
+    <string name="activity_income">Income</string>
+    <string name="activity_outcome">Outcome</string>
+    <string name="m_date_as_string">dateAsString</string>
+    <string name="m_argument_date">argDate</string>
+
+    <string name="alert_empty_name">Item name cannot be empty!</string>
+    <string name="alert_name_exists">Item with the same name is already exists!</string>
+    <string name="alert_item_not_added">Something went wrong, item is not added!</string>
+    <string name="alert_item_not_updated">Something went wrong, item is not updated!</string>
+    <string name="alert_item_save_changes">Couldn\'t save your changes, please try again</string>
+    <string name="alert_item_delete_from_documents">Item: %1$s is exists in %2$s document(s). This item will be deleted from the documents. Delete anyway?</string>
+    <string name="alert_item_not_in_database">The table contains item(s) that are not in the database! You should add item(s) first</string>
+    <string name="alert_document_saved">Document saved!</string>
+    <string name="alert_table_is_empty">Table is empty!</string>
+    <string name="alert_no_items_in_table">There are no items in table!</string>
+    <string name="alert_incorrect_quantity">The quantity of items is incorrect!</string>
+    <string name="alert_could_not_delete">Couldn\'t delete document, please try again</string>
+    <string name="alert_count_is_too_big">Count is too big! Shall not be more then 2 147 483 647!</string>
+
 
 </resources>

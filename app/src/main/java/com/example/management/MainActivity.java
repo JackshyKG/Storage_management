@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity  {
         bnvMain.setOnNavigationItemSelectedListener(item -> {
 
             if (item.getItemId() == clickedButtonId) {
-                return false;/* Last item was clicked, nothing to change */
+                return false;/* Last nav button was clicked again, nothing to change */
             }
 
             clickedButtonId = item.getItemId();

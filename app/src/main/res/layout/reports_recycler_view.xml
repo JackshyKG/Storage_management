@@ -73,7 +73,7 @@
                     android:layout_height="5dp"
                     android:layout_gravity="center"
                     android:layout_marginLeft="6dp"
-                    android:text="Transaction"
+                    android:text="@string/activity_transaction"
                     android:textColor="@color/colorBlack"
                     android:textSize="20sp" />
 
@@ -81,7 +81,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
-                    android:text="Remaining"
+                    android:text="@string/activity_remaining"
                     android:textColor="@color/colorBlack"
                     android:textSize="20sp"
                     android:layout_gravity="center"

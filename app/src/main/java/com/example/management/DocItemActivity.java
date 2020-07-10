@@ -80,14 +80,10 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
         /*DELETE ROW ON SWIPE (to right)*/
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) { return false; }
 
             @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                deleteItemFromList(viewHolder.getAdapterPosition());
-            }
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) { deleteItemFromList(viewHolder.getAdapterPosition()); }
         }).attachToRecyclerView(recyclerView);
 
     }
@@ -108,19 +104,28 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
 
         if (itemList.size() < 1) {
 
-            Toast.makeText(this, "Таблица товаров пуста!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.alert_table_is_empty, Toast.LENGTH_SHORT).show();
             return;
 
         } else {
+
+            int itemCount;
             for (String[] itemLine : itemList) {
 
                 if (itemLine[0] == null || itemLine[0].isEmpty()) {
-                    Toast.makeText(this, "В таблице не указаны товары!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.alert_no_items_in_table, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if (itemLine[1] == null || itemLine[1].isEmpty() || Integer.parseInt(itemLine[1]) <= 0) {
-                    Toast.makeText(this, "В таблице количество товаров указаны неверно!", Toast.LENGTH_SHORT).show();
+                try {
+                    itemCount = Integer.parseInt(itemLine[1]);
+                } catch (NumberFormatException e) {
+                    Toast.makeText(this, R.string.alert_count_is_too_big, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (itemLine[1] == null || itemLine[1].isEmpty() || itemCount <= 0) {
+                    Toast.makeText(this, R.string.alert_incorrect_quantity, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -143,15 +148,13 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
             SQLiteDB sqLiteDB = new SQLiteDB(getApplicationContext());
             SQLiteDatabase database = sqLiteDB.getWritableDatabase();
 
-            String tableQuery = "items";
-            String[] columns = {"item", "_id"};
             String selection = "item = ?";
             String[] selectionArgs = new String[1];
 
             for (String[] strLine : itemList) {
 
                 selectionArgs[0] = strLine[0];
-                cursor = database.query(tableQuery, columns, selection, selectionArgs, null, null, null);
+                cursor = database.query(SQLiteDB.TABLE_ITEM, null, selection, selectionArgs, null, null, null);
 
                 if (cursor.moveToFirst()) {
                     idIndex = cursor.getColumnIndex("_id");
@@ -173,14 +176,15 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
         @Override
         protected void onPostExecute(Integer intResult) {
 
-            String resString = "Документ сохранен!";
+            String resString;
             if (intResult == 0) {
                 for (String[] itemLine : itemList) {
                     itemLine[2] = "";
                 }
-                resString = "В таблице присутствуют товары, которых нет в базе данных!";
+                resString = getString(R.string.alert_item_not_in_database);
             } else {
                 saveDocument();
+                resString = getString(R.string.alert_document_saved);
             }
 
             Toast.makeText(getApplicationContext(), resString, Toast.LENGTH_SHORT).show();
@@ -211,7 +215,7 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
             int result = database.delete(SQLiteDB.TABLE_DOC, SQLiteDB.KEY_NUMBER + " = " + document.getNumber(), null);
             if (result < 1) {
                 sqLiteDB.close();
-                Toast.makeText(this, "Couldn't save your changes, please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.alert_item_save_changes, Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -223,18 +227,28 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
         }
 
         // add
+        int itemCount;
         ContentValues contentValues = new ContentValues();
+        database.beginTransaction();
         for (String[] strLine : itemList) {
+
+            itemCount = Integer.parseInt(strLine[1]);
+
+            if (!documentIn) {
+                itemCount = -1 * itemCount;
+            }
 
             contentValues.put(SQLiteDB.KEY_NUMBER, document.getNumber());
             contentValues.put(SQLiteDB.KEY_DATE, document.getDate());
             contentValues.put(SQLiteDB.KEY_TIME, document.getTime());
             contentValues.put(SQLiteDB.KEY_ITEM_ID, Integer.parseInt(strLine[2]));
-            contentValues.put(SQLiteDB.KEY_COUNT, documentIn ? Integer.parseInt(strLine[1]) : -1 * Integer.parseInt(strLine[1]));
+            contentValues.put(SQLiteDB.KEY_COUNT, itemCount);
             database.insert(SQLiteDB.TABLE_DOC, null, contentValues);
 
         }
 
+        database.setTransactionSuccessful();
+        database.endTransaction();
         sqLiteDB.close();
 
         Intent intent = new Intent();
@@ -250,9 +264,7 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
         SQLiteDB sqLiteDB = new SQLiteDB(this);
         SQLiteDatabase database = sqLiteDB.getReadableDatabase();
 
-        String tableQuery = "documents";
-        String[] columns = {"number"};
-        Cursor cursor = database.query(tableQuery, columns, null, null, null, null, "number DESC","1");
+        Cursor cursor = database.query(SQLiteDB.TABLE_DOC, new String[]{"number"}, null, null, null, null, "number DESC","1");
 
         if (cursor.moveToFirst()) {
             int nIndex = cursor.getColumnIndex("number");

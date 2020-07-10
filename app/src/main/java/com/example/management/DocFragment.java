@@ -190,7 +190,7 @@ public class DocFragment extends Fragment {
 
             } while (cursor.moveToNext());
 
-            docList.add(new Document(number, date, time, documentIn, tableList));// last one
+            docList.add(new Document(number, date, time, documentIn, tableList));/*last one to add*/
 
         }
 
@@ -214,9 +214,7 @@ public class DocFragment extends Fragment {
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
 
             @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) { return false; }
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
@@ -229,7 +227,7 @@ public class DocFragment extends Fragment {
 
                 rows = database.delete(SQLiteDB.TABLE_DOC, SQLiteDB.KEY_NUMBER+"="+docList.get(currentPosition).getNumber(), null);
                 if (rows < 1) {
-                    Toast.makeText(getActivity(), "Couldn't delete document, please try again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.alert_could_not_delete, Toast.LENGTH_SHORT).show();
                 }
                 sqLiteDB.close();
 
@@ -251,11 +249,11 @@ public class DocFragment extends Fragment {
         if (requestCode == REQUEST_CODE_DATE_PICKER && resultCode == Activity.RESULT_OK) {
 
             if (date1Clicked) {
-                date1.setText(data.getStringExtra("stringDate"));
-                argDate1 = data.getStringExtra("argDate");
+                date1.setText(data.getStringExtra(getString(R.string.m_date_as_string)));
+                argDate1 = data.getStringExtra(getString(R.string.m_argument_date));
             } else {
-                date2.setText(data.getStringExtra("stringDate"));
-                argDate2 = data.getStringExtra("argDate");
+                date2.setText(data.getStringExtra(getString(R.string.m_date_as_string)));
+                argDate2 = data.getStringExtra(getString(R.string.m_argument_date));
             }
 
         /*on new document added*/

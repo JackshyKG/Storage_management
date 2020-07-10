@@ -21,7 +21,7 @@ public class ItemDialog extends DialogFragment {
 
     private TextView tv_id;
     private EditText et_name;
-    private Button bSave, bCancel;/*bSave <-> can be as Delete anyway*/
+    private Button bSave, bCancel;/*bSave - can be as "Delete ANYWAY" button*/
 
     public interface OnSaveClicked {
         void itemDeleting(boolean deleteItem);
@@ -46,7 +46,7 @@ public class ItemDialog extends DialogFragment {
             view = inflater.inflate(R.layout.item_delete_dialog, container, false);
 
             tv_id = view.findViewById(R.id.tv_information);
-            tv_id.setText("Item: "+name+" is exists in "+id+" document(s). This item will be deleted from the documents. Delete anyway?");
+            tv_id.setText(getResources().getString(R.string.alert_item_delete_from_documents, name, String.valueOf(id)));
 
             bSave = view.findViewById(R.id.b_delete_anyway);
             bCancel = view.findViewById(R.id.b_cancel_del_any);

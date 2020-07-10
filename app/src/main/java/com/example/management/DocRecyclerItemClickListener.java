@@ -13,9 +13,7 @@ public class DocRecyclerItemClickListener implements RecyclerView.OnItemTouchLis
     private OnItemClickListener listener;
     private GestureDetector gestureDetector;
 
-    public interface OnItemClickListener {
-        public void onItemClick(View view, int position);
-    }
+    public interface OnItemClickListener { void onItemClick(View view, int position);}
 
     public DocRecyclerItemClickListener(Context context, final OnItemClickListener listener) {
 

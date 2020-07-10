@@ -63,15 +63,15 @@ public class ItemFragment extends Fragment implements ItemDialog.OnSaveClicked {
         String selection = null;
         String[] selectionArgs = null;
         if (!selectedString.isEmpty()) {
-            selection = SQLiteDB.KEY_ITEM + " LIKE ?";
+            selection = SQLiteDB.ITEM_NAME + " LIKE ?";
             selectionArgs = new String[]{"%"+selectedString+"%"};
         }
 
-        Cursor cursor = database.query(SQLiteDB.TABLE_ITEM, null, selection, selectionArgs, null, null, SQLiteDB.KEY_ITEM);
+        Cursor cursor = database.query(SQLiteDB.TABLE_ITEM, null, selection, selectionArgs, null, null, SQLiteDB.ITEM_NAME);
         if (cursor.moveToFirst()) {
 
             int idIndex = cursor.getColumnIndex(SQLiteDB.KEY_ID);
-            int nameIndex = cursor.getColumnIndex(SQLiteDB.KEY_ITEM);
+            int nameIndex = cursor.getColumnIndex(SQLiteDB.ITEM_NAME);
 
             String id, name;
 
@@ -170,7 +170,7 @@ public class ItemFragment extends Fragment implements ItemDialog.OnSaveClicked {
 
             rows = database.delete(SQLiteDB.TABLE_DOC, SQLiteDB.KEY_ITEM_ID+"="+idDelete, null);
             if (rows < 1) {
-                Toast.makeText(getActivity(), "Couldn't save your changes, please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.alert_item_save_changes, Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -205,9 +205,9 @@ public class ItemFragment extends Fragment implements ItemDialog.OnSaveClicked {
     @Override
     public void sendItemIdName(int id, String name) {
 
-        /*empty name*/
+        /*check for empty name*/
         if (name == null || name.isEmpty()) {
-            Toast.makeText(getActivity(), "Item name cannot be empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.alert_empty_name, Toast.LENGTH_SHORT).show();
             return;
         } else if (id != -1 && name.toLowerCase().equals(itemList.get(currentPosition)[1].toLowerCase())) {
             return;
@@ -222,13 +222,13 @@ public class ItemFragment extends Fragment implements ItemDialog.OnSaveClicked {
         if (cursor.moveToFirst()) {
             cursor.close();
             sqLiteDB.close();
-            Toast.makeText(getActivity(), "Item with the same name is already exists!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.alert_name_exists, Toast.LENGTH_SHORT).show();
             return;
         }
 
         /*insert or update*/
         ContentValues cv = new ContentValues();
-        cv.put(SQLiteDB.KEY_ITEM, name);
+        cv.put(SQLiteDB.ITEM_NAME, name);
 
         if (id == -1) {/*new one*/
 
@@ -238,7 +238,7 @@ public class ItemFragment extends Fragment implements ItemDialog.OnSaveClicked {
                 itemList.add(new String[] {String.valueOf(insertedId), name});
                 itemAdapter.notifyItemInserted(itemList.size() - 1);
             } else {
-                Toast.makeText(getActivity(), "Something went wrong, item is not added!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.alert_item_not_added, Toast.LENGTH_SHORT).show();
             }
 
         } else {/*edited*/
@@ -249,7 +249,7 @@ public class ItemFragment extends Fragment implements ItemDialog.OnSaveClicked {
                 itemList.set(currentPosition, new String[]{String.valueOf(id), name});
                 itemAdapter.notifyItemChanged(currentPosition);
             } else {
-                Toast.makeText(getActivity(), "Something went wrong, item is not updated!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.alert_item_not_updated, Toast.LENGTH_SHORT).show();
             }
 
         }

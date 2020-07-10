@@ -49,7 +49,7 @@ public class ReportsFragment extends Fragment {
     private boolean reportType;/*true - Remaining, false - Transaction*/
     private boolean formButtonClicked;
     private String argDate1, argDate2;
-    private ArrayList<String[]> reportList;/*0 - item, 1 - count income, 2 - count outgo(or remaining)*/
+    private ArrayList<String[]> reportList;/*0 - item, 1 - count income(empty if remaining), 2 - count outgo(or remaining)*/
 
     @Nullable
     @Override
@@ -273,11 +273,11 @@ public class ReportsFragment extends Fragment {
         if (requestCode == REQUEST_CODE_DATE_PICKER && resultCode == Activity.RESULT_OK) {
 
             if (date1Clicked) {
-                date1.setText(data.getStringExtra("stringDate"));
-                argDate1 = data.getStringExtra("argDate");
+                date1.setText(data.getStringExtra(getString(R.string.m_date_as_string)));
+                argDate1 = data.getStringExtra(getString(R.string.m_argument_date));
             } else {
-                date2.setText(data.getStringExtra("stringDate"));
-                argDate2 = data.getStringExtra("argDate");
+                date2.setText(data.getStringExtra(getString(R.string.m_date_as_string)));
+                argDate2 = data.getStringExtra(getString(R.string.m_argument_date));
             }
 
         }

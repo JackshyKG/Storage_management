@@ -1,7 +1,5 @@
 package com.example.management;
 
-import android.content.res.Resources;
-import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -9,8 +7,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
-import androidx.annotation.RequiresApi;
 
 public class Document implements Parcelable {
 
@@ -30,30 +26,30 @@ public class Document implements Parcelable {
         this.documentIn = documentIn;
     }
 
-    public int getNumber() {
-        return number;
-    }
 
-    public void setNumber(int number) {
-        this.number = number;
-    }
+    /*GET*/
+    public int getNumber() { return number; }
 
-    public long getDate() {
-        return date;
-    }
+    public long getDate() { return date; }
 
-    public String getDateAsStringType() {
+    public int getTime() { return time; }
 
-        String dateTime = "";
-        Date docDate = getDateAsDateType();
+    public boolean getDocumentIn() { return documentIn; }
 
-        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-        dateTime = format.format(docDate);
+    public ArrayList<String[]> getTableList() { return tableList; }
 
-        return dateTime;
 
-    }
+    /*SET*/
+    public void setDate(int date) { this.date = date; }
 
+    public void setTime(int time) { this.time = time; }
+
+    public void setDocumentIn (boolean documentIn) { this.documentIn = documentIn; }
+
+    public void setTableList(ArrayList<String[]> tableList) { this.tableList = tableList; }
+
+
+    /*GET AS A STRING*/
     public Date getDateAsDateType() {
 
         Date docDate = null;
@@ -84,54 +80,16 @@ public class Document implements Parcelable {
 
     }
 
-    public void setDate(int date) {
-        this.date = date;
-    }
+    public String getDateAsStringType() {
 
-    public int getTime() {
-        return time;
-    }
+        String dateTime = "";
+        Date docDate = getDateAsDateType();
 
-    public void setTime(int time) {
-        this.time = time;
-    }
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        dateTime = format.format(docDate);
 
-    public boolean getDocumentIn() {
-        return documentIn;
-    }
+        return dateTime;
 
-    public void setDocumentIn (boolean documentIn) {
-        this.documentIn = documentIn;
-    }
-
-    public ArrayList<String[]> getTableList() {
-        return tableList;
-    }
-
-    public String getTableListAsString() {
-
-        String asString = "";
-
-        for (String[] str : tableList) {
-
-            asString = asString + str[0] + " - " + str[1]+", ";
-
-            if (asString.length() > MAX_LENGTH_AS_STRING) {
-                asString = asString.substring(0, MAX_LENGTH_AS_STRING + 1).concat("...");
-                return asString;
-            }
-
-        }
-
-        if (asString != null && asString.length() > 0) {
-            asString = asString.substring(0, asString.length() - 2);
-        }
-
-        return asString;
-    }
-
-    public void setTableList(ArrayList<String[]> tableList) {
-        this.tableList = tableList;
     }
 
     public static int getDateOrTimeAsInt(String dateString, boolean toDate) {
@@ -161,6 +119,27 @@ public class Document implements Parcelable {
 
     }
 
+    public String getTableListAsString() {
+
+        String asString = "";
+
+        for (String[] str : tableList) {
+
+            asString = asString + str[0] + " - " + str[1]+", ";
+
+            if (asString.length() > MAX_LENGTH_AS_STRING) {
+                asString = asString.substring(0, MAX_LENGTH_AS_STRING + 1).concat("...");
+                return asString;
+            }
+
+        }
+
+        if (asString != null && asString.length() > 0) {
+            asString = asString.substring(0, asString.length() - 2);
+        }
+
+        return asString;
+    }
 
 
 
