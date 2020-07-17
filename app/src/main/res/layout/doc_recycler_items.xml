@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:padding="2dp"
-                android:text="@string/sample_doc_number"
+                android:text="00000001"
                 android:textColor="@color/colorBlack"
                 android:textSize="24sp" />
 
@@ -32,7 +32,7 @@
                 android:id="@+id/tv_doc_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/sample_doc_date"
+                android:text="03.06.2020"
                 android:textColor="@color/colorBlack"
                 android:textSize="20sp"
                 android:layout_alignParentRight="true"
@@ -43,7 +43,7 @@
                 android:id="@+id/tv_doc_items"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/sample_doc_items"
+                android:text="item - 1, item - 2, item - 3..."
                 android:textColor="@color/colorGrey"
                 android:layout_below="@+id/tv_doc_number"
                 android:layout_marginStart="10dp"

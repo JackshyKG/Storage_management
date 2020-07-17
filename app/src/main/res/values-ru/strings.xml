@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Мини склад</string>
+    <string name="add_button">добавить</string>
+    <string name="edit_button">изменить</string>
+    <string name="save_button">сохранить</string>
+    <string name="delete">удалить</string>
+    <string name="cancel_button">отмена</string>
+    <string name="show_button">показать</string>
+    <string name="button_documents">Документы</string>
+    <string name="button_items">Товары</string>
+    <string name="button_report">Отчет</string>
+    <string name="button_info">Инфо</string>
+    <string name="date_title">Дата:</string>
+    <string name="number_title">Номер:</string>
+    <string name="toast_doc_saved">Документ сохранен!</string>
+    <string name="intent_document">документ</string>
+    <string name="activity_transaction">Обороты</string>
+    <string name="activity_remaining">Остатки</string>
+    <string name="activity_income">Приход</string>
+    <string name="activity_outgo">Расход</string>
+    <string name="alert_empty_name">Название товара не может быть пустым!</string>
+    <string name="alert_name_exists">Товар с таким названием уже существует!</string>
+    <string name="alert_item_not_added">Что-то пошло не так, товар не добавлен!</string>
+    <string name="alert_item_not_updated">Что-то пошло не так, товар не изменен!</string>
+    <string name="alert_item_save_changes">Не удалось сохранить изменения, пожалуйста попробуйте ещё раз</string>
+    <string name="alert_item_delete_from_documents">Товар: %1$s найден в %2$s документе(ах). Этот товар будет удален из всех документов. Все равно удалить?</string>
+    <string name="alert_item_not_in_database">В таблице найдены товары, которых нет в базе данных! Нужно сперва добавить товары.</string>
+    <string name="alert_table_is_empty">Таблица пуста!</string>
+    <string name="alert_no_items_in_table">Нет товаров в таблице!</string>
+    <string name="alert_incorrect_quantity">Количество товаров указана неверно!</string>
+    <string name="alert_could_not_delete">Документ не удален, попробуйте ещё раз</string>
+    <string name="alert_count_is_too_big">Количество слишком большое, не должно быть более 2 147 483 647!</string>
+    <string name="m_argument_date">аргДата</string>
+    <string name="m_date_as_string">датаКакСтрока</string>
+    <string name="hint_item_dialog">товар</string>
+
+</resources>

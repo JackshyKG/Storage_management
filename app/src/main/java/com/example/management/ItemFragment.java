@@ -166,7 +166,7 @@ public class ItemFragment extends Fragment implements ItemDialog.OnSaveClicked {
             Cursor cursor = database.query(SQLiteDB.TABLE_DOC, null, SQLiteDB.KEY_ITEM_ID+"="+idDelete,null, null, null, null, null);
             rows = cursor.getCount();
             cursor.close();
-        } else {/*delete if clicked DELETE ANYWAY*/
+        } else {/*delete if clicked DELETE*/
 
             rows = database.delete(SQLiteDB.TABLE_DOC, SQLiteDB.KEY_ITEM_ID+"="+idDelete, null);
             if (rows < 1) {

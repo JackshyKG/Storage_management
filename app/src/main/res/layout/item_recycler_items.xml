@@ -24,7 +24,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.7"
-                android:text="@string/sample_item"
+                android:text="item"
                 android:textSize="24sp"
                 android:padding="2dp"
                 android:textStyle="bold"
@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
                 android:textAlignment="textEnd"
-                android:text="@string/sample_doc_number"
+                android:text="00000001"
                 android:textSize="16sp"
                 android:padding="2dp"
                 />

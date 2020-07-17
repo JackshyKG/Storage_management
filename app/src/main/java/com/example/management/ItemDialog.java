@@ -21,7 +21,7 @@ public class ItemDialog extends DialogFragment {
 
     private TextView tv_id;
     private EditText et_name;
-    private Button bSave, bCancel;/*bSave - can be as "Delete ANYWAY" button*/
+    private Button bSave, bCancel;/*bSave - can be as "Delete" button*/
 
     public interface OnSaveClicked {
         void itemDeleting(boolean deleteItem);

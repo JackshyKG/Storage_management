@@ -4,19 +4,25 @@
     <item
         android:id="@+id/b_nav_doc"
         android:title="@string/button_documents"
-        android:icon="@drawable/icons8_documents_50"
+        android:icon="@drawable/ic_documents"
         />
 
     <item
         android:id="@+id/b_nav_item"
         android:title="@string/button_items"
-        android:icon="@drawable/icons8_item_50"
+        android:icon="@drawable/ic_items"
         />
 
     <item
         android:id="@+id/b_nav_report"
         android:title="@string/button_report"
-        android:icon="@drawable/icons8_report_64"
+        android:icon="@drawable/ic_reports"
+        />
+
+    <item
+        android:id="@+id/b_nav_info"
+        android:title="@string/button_info"
+        android:icon="@drawable/ic_info"
         />
 
 </menu>

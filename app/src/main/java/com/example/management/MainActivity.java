@@ -6,9 +6,12 @@ import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.example.management.Reports.ReportsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity  {
@@ -18,6 +21,7 @@ public class MainActivity extends AppCompatActivity  {
     private DocFragment docFragment;
     private ItemFragment itemFragment;
     private ReportsFragment reportsFragment;
+    private InfoFragment infoFragment;
     private FragmentManager supportFM;
 
     @Override
@@ -35,12 +39,14 @@ public class MainActivity extends AppCompatActivity  {
         docFragment = new DocFragment();
         itemFragment = new ItemFragment();
         reportsFragment = new ReportsFragment();
+        infoFragment = new InfoFragment();
         activeFragment = docFragment;
 
         supportFM = getSupportFragmentManager();
         supportFM.beginTransaction().add(R.id.main_fragment, docFragment).
                                      add(R.id.main_fragment, itemFragment).hide(itemFragment).
-                                     add(R.id.main_fragment, reportsFragment).hide(reportsFragment).commit();
+                                     add(R.id.main_fragment, reportsFragment).hide(reportsFragment).
+                                     add(R.id.main_fragment, infoFragment).hide(infoFragment).commit();
 
         // bottom navigation on item selected listener
         BottomNavigationView bnvMain = findViewById(R.id.bnv_main);
@@ -67,6 +73,11 @@ public class MainActivity extends AppCompatActivity  {
                 case R.id.b_nav_report:
                     supportFM.beginTransaction().hide(activeFragment).show(reportsFragment).commit();
                     activeFragment = reportsFragment;
+                    break;
+
+                case R.id.b_nav_info:
+                    supportFM.beginTransaction().hide(activeFragment).show(infoFragment).commit();
+                    activeFragment = infoFragment;
                     break;
 
             }

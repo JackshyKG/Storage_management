@@ -54,7 +54,7 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
 
         Intent intent = getIntent();
         newDocument = !intent.hasExtra(getString(R.string.intent_document));
-        documentIn = intent.getBooleanExtra(getString(R.string.intent_document_in), true);
+        documentIn = intent.getBooleanExtra("documentIn", true);
         REQUEST_CODE = newDocument ? DocFragment.REQUEST_CODE_NEW_DOCUMENT : DocFragment.REQUEST_CODE_CURRENT_DOCUMENT;
 
         if (newDocument) {
@@ -184,7 +184,7 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
                 resString = getString(R.string.alert_item_not_in_database);
             } else {
                 saveDocument();
-                resString = getString(R.string.alert_document_saved);
+                resString = getString(R.string.toast_doc_saved);
             }
 
             Toast.makeText(getApplicationContext(), resString, Toast.LENGTH_SHORT).show();

@@ -207,7 +207,7 @@ public class DocFragment extends Fragment {
 
                     Intent intent = new Intent(getContext(), DocItemActivity.class);
                     intent.putExtra(getString(R.string.intent_document), docList.get(position));
-                    intent.putExtra(getString(R.string.intent_document_in), docList.get(position).getDocumentIn());
+                    intent.putExtra("documentIn", docList.get(position).getDocumentIn());
                     startActivityForResult(intent, REQUEST_CODE_CURRENT_DOCUMENT);
 
                 }));
