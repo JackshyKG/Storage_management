@@ -52,7 +52,6 @@ public class DocFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.doc_recycler_view, container, false);
-        recyclerView = rootView.findViewById(R.id.rv_documents);
 
         date1 = rootView.findViewById(R.id.tv_date_1);
         date2 = rootView.findViewById(R.id.tv_date_2);
@@ -63,10 +62,10 @@ public class DocFragment extends Fragment {
             return null;
         }
 
-        fabAdd = rootView.findViewById(R.id.fab_add_doc);
-        bShow = rootView.findViewById(R.id.b_show);
-
         docList = new ArrayList<>();
+        bShow = rootView.findViewById(R.id.b_show);
+        fabAdd = rootView.findViewById(R.id.fab_add_doc);
+        recyclerView = rootView.findViewById(R.id.rv_documents);
 
         initButtons();
         fillDocList();
@@ -201,6 +200,7 @@ public class DocFragment extends Fragment {
 
     private void recViewCommands() {
 
+        /*Open document on tap*/
         recyclerView.addOnItemTouchListener(new DocRecyclerItemClickListener(getActivity(), (view, position) -> {
 
                     currentDocumentPosition = position;
@@ -211,6 +211,8 @@ public class DocFragment extends Fragment {
                     startActivityForResult(intent, REQUEST_CODE_CURRENT_DOCUMENT);
 
                 }));
+
+        /*DELETE ROW ON SWIPE (to right)*/
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
 
             @Override
@@ -232,7 +234,7 @@ public class DocFragment extends Fragment {
                 sqLiteDB.close();
 
             }
-        }).attachToRecyclerView(recyclerView);/*DELETE ROW ON SWIPE (to right)*/
+        }).attachToRecyclerView(recyclerView);
 
     }
 

@@ -109,9 +109,9 @@ public class ItemFragment extends Fragment implements ItemDialog.OnSaveClicked {
 
                 currentPosition = viewHolder.getAdapterPosition();
 
-                int rows = ItemInDocsOrDelete(itemList.get(currentPosition)[0], false);
+                int rows = FindItemsInDocs(itemList.get(currentPosition)[0]);
                 if (rows < 1) {
-                    deleteItemFromList(currentPosition);
+                    deleteItemFromDB(currentPosition);
                 } else {
                     openDialog(rows, itemList.get(currentPosition)[1], true);
                 }
@@ -155,28 +155,18 @@ public class ItemFragment extends Fragment implements ItemDialog.OnSaveClicked {
 
     }
 
-    private int ItemInDocsOrDelete(String idDelete, boolean deleteRows) {
+    private int FindItemsInDocs(String idDelete) {
 
-        int rows = 0;
+        int rows;
 
         SQLiteDB sqLiteDB = new SQLiteDB(getActivity());
         SQLiteDatabase database = sqLiteDB.getReadableDatabase();
 
-        if (!deleteRows) {/*just to show dialog*/
-            Cursor cursor = database.query(SQLiteDB.TABLE_DOC, null, SQLiteDB.KEY_ITEM_ID+"="+idDelete,null, null, null, null, null);
-            rows = cursor.getCount();
-            cursor.close();
-        } else {/*delete if clicked DELETE*/
+        Cursor cursor = database.query(SQLiteDB.TABLE_DOC, null, SQLiteDB.KEY_ITEM_ID+"="+idDelete,null, null, null, null, null);
+        rows = cursor.getCount();
 
-            rows = database.delete(SQLiteDB.TABLE_DOC, SQLiteDB.KEY_ITEM_ID+"="+idDelete, null);
-            if (rows < 1) {
-                Toast.makeText(getActivity(), R.string.alert_item_save_changes, Toast.LENGTH_SHORT).show();
-            }
-
-        }
-
+        cursor.close();
         sqLiteDB.close();
-
         return rows;
 
     }
@@ -192,12 +182,20 @@ public class ItemFragment extends Fragment implements ItemDialog.OnSaveClicked {
 
         if (deleteItem) {
 
-            int rowsDeleted = ItemInDocsOrDelete(itemList.get(currentPosition)[0], true);
-            if (rowsDeleted > 0) {
-                deleteItemFromList(currentPosition);
-            }
+            SQLiteDB sqLiteDB = new SQLiteDB(getActivity());
+            SQLiteDatabase database = sqLiteDB.getWritableDatabase();
 
-        } else {
+            /*deleting from documents*/
+            int rowsDeleted = database.delete(SQLiteDB.TABLE_DOC, SQLiteDB.KEY_ITEM_ID+"="+itemList.get(currentPosition)[0], null);
+            sqLiteDB.close();
+
+            if (rowsDeleted < 1) {
+                Toast.makeText(getActivity(), R.string.alert_item_save_changes, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            deleteItemFromDB(currentPosition);
+
+        } else {/*Cancel deleting on swipe*/
             itemAdapter.notifyItemChanged(currentPosition);
         }
     }
@@ -258,14 +256,17 @@ public class ItemFragment extends Fragment implements ItemDialog.OnSaveClicked {
 
     }
 
-    private void deleteItemFromList(int position) {
+    /*Delete item from DB and from list*/
+    private void deleteItemFromDB(int position) {
 
         SQLiteDB sqLiteDB = new SQLiteDB(getActivity());
         SQLiteDatabase database = sqLiteDB.getWritableDatabase();
         database.delete(SQLiteDB.TABLE_ITEM, "_id = " + itemList.get(position)[0], null);
+        sqLiteDB.close();
 
         itemList.remove(position);
         itemAdapter.notifyItemRemoved(position);
+
     }
 
 }

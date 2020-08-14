@@ -35,6 +35,7 @@ public class DocRecyclerAdapter extends RecyclerView.Adapter<DocRecyclerAdapter.
             tvDocDate = itemView.findViewById(R.id.tv_doc_date);
 
         }
+
     }
 
     @NonNull

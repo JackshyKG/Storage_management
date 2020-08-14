@@ -99,6 +99,7 @@ public class DocItemsRecyclerAdapter extends RecyclerView.Adapter<DocItemsRecycl
             });
 
         }
+
     }
 
     private void getItemsFromDB() {

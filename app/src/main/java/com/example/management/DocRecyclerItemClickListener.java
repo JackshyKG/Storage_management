@@ -21,11 +21,9 @@ public class DocRecyclerItemClickListener implements RecyclerView.OnItemTouchLis
 
         gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
             @Override
-            public boolean onSingleTapUp(MotionEvent e) {
-                return true;
-            }
-        });
+            public boolean onSingleTapUp(MotionEvent e) {return true;}
 
+        });
 
     }
 

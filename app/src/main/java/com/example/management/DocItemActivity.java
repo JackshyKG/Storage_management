@@ -100,6 +100,7 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
 
     }
 
+    /*Save document*/
     public void onClickSaveDocument(View v) {
 
         if (itemList.size() < 1) {
@@ -279,6 +280,7 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
     }
 
 
+    /*Buttons*/
     public void onDocClickAddItem(View v) {
         itemList.add(new String[3]);
         itemAdapter.notifyDataSetChanged();
@@ -288,6 +290,7 @@ public class DocItemActivity extends AppCompatActivity implements DatePickerDial
         DialogFragment datePickerFragment = new DatePickerFragment();
         datePickerFragment.show(getSupportFragmentManager(), "date_picker");
     }
+
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {

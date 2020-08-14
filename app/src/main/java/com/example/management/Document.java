@@ -49,7 +49,7 @@ public class Document implements Parcelable {
     public void setTableList(ArrayList<String[]> tableList) { this.tableList = tableList; }
 
 
-    /*GET AS A STRING*/
+    /*GET IN DIFFERENT TYPES*/
     public Date getDateAsDateType() {
 
         Date docDate = null;
@@ -156,20 +156,15 @@ public class Document implements Parcelable {
 
     public static final Creator<Document> CREATOR = new Creator<Document>() {
         @Override
-        public Document createFromParcel(Parcel in) {
-            return new Document(in);
-        }
+        public Document createFromParcel(Parcel in) { return new Document(in); }
 
         @Override
-        public Document[] newArray(int size) {
-            return new Document[size];
-        }
+        public Document[] newArray(int size) { return new Document[size]; }
+
     };
 
     @Override
-    public int describeContents() {
-        return 0;
-    }
+    public int describeContents() { return 0; }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
